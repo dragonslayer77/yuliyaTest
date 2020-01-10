@@ -1,0 +1,7 @@
+{
+  "presets": [ "@babel/preset-env", "@babel/preset-react" ],
+  // "plugins": [ "transform-class-properties" ],
+  "plugins": [
+    [ "import", { "libraryName": "antd", "style": "css" }] // `style: true` for less
+  ]
+}
