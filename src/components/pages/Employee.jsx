@@ -1,41 +1,62 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import { Statistic, Row, Col, Button } from "antd";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import dataHandler from "../../data/dataHandler";
-import History from "../lists/History";
+import {
+  Statistic, Row, Col, Button,
+} from 'antd'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import dataHandler from '../../data/dataHandler'
+import History from '../lists/History'
 
 const StyledButton = styled(Button)`
   margin: 10px;
-`;
+`
 
 class Employee extends Component {
   constructor(props) {
-    super(props);
+    const { match: { params: { userId } } } = props
+    super(props)
     this.state = {
-      ...dataHandler.get("employees", this.props.match.params.userId)
-    };
+      ...dataHandler.get('employees', parseInt(userId, 10)),
+    }
   }
+
   componentDidUpdate() {
-    dataHandler.set("employees", this.props.match.params.userId, this.state)
+    const { match: { params: { userId } } } = this.props
+    dataHandler.set('employees', parseInt(userId, 10), this.state)
   }
 
   onSubmitInfo = () => {
-    this.setState({ ...this.state, points: this.state.points + 50, history: [...this.state.history, "Submitted Info, +50 bitGrows"] });
+    const { points, history } = this.state
+    this.setState(prevState => ({ ...prevState, points: points + 50, history: [...history, 'Submitted Info, +50 bitGrows'] }))
   };
+
   onEventParticip = () => {
-    this.setState({ ...this.state, points: this.state.points + 200, history: [...this.state.history, "Participated in an Event, +200 bitGrows"]  });
+    const { points, history } = this.state
+    this.setState(prevState => ({ ...prevState, points: points + 200, history: [...history, 'Participated in an Event, +200 bitGrows'] }))
   };
+
   onFailSubmit = () => {
-    this.setState({ ...this.state, points: this.state.points - 100, history: [...this.state.history, "Did not submit Info, -100 bitGrows"]  });
+    const { points, history } = this.state
+    this.setState(prevState => ({ ...prevState, points: points - 100, history: [...history, 'Did not submit Info, -100 bitGrows'] }))
   };
 
   render() {
-    const { name, points, history } = this.state;
+    if (Object.keys(this.state).length === 0) {
+      return (
+        <div>
+          <Link to="/employee">
+            <Button type="primary">Home</Button>
+          </Link>
+          <h1>Invalid ID!</h1>
+        </div>
+      )
+    }
+    const { name, points, history } = this.state
     return (
       <div>
-        <Link to="/">
+        <Link to="/employee">
           <Button type="primary">Home</Button>
         </Link>
         <h1>{name}</h1>
@@ -75,12 +96,16 @@ class Employee extends Component {
             </Row>
           </Col>
           <Col span={12}>
-            <History history={history}/>
+            <History history={history} />
           </Col>
         </Row>
       </div>
-    );
+    )
   }
 }
 
-export default Employee;
+Employee.propTypes = {
+  match: PropTypes.object.isRequired,
+}
+
+export default Employee
