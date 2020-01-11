@@ -1,19 +1,19 @@
-import React from "react";
-import Employees from "../lists/Employees";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
   margin: 20px;
   text-align: center;
-`;
+`
 
-const Home = () => {
+const Employees = () => {
   return (
     <Wrapper>
       <h1>BitGrow</h1>
-      <Employees />
+      <Link to="employee">Manage Employees</Link>
     </Wrapper>
-  );
-};
+  )
+}
 
-export default Home;
+export default Employees
