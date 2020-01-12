@@ -1,49 +1,35 @@
-import currentEmployees from "./employees";
+import employees from './employees'
 
-const dataHandler = {};
+const data = { employees }
+const dataHandler = {}
 
-dataHandler.getAll = domain => {
-  switch (domain) {
-    case "employees":
-      const employees = JSON.parse(localStorage.getItem("employees"));
-      if (employees) {
-        return employees;
-      }
-      localStorage.setItem("employees", JSON.stringify(currentEmployees));
-      return JSON.parse(localStorage.getItem("employees"));
-    default:
-      return null;
+dataHandler.getAll = (domain) => {
+  const items = JSON.parse(localStorage.getItem(domain))
+  if (items) {
+    return items
   }
-};
+  localStorage.setItem(domain, JSON.stringify(data[domain]))
+  return JSON.parse(localStorage.getItem(domain))
+}
 
 dataHandler.get = (domain, id) => {
-  switch (domain) {
-    case "employees":
-      const employees = JSON.parse(localStorage.getItem("employees"));
-      return employees.find(employee => employee.key == id);
-    default:
-      return false;
-  }
-};
+  const employees = JSON.parse(localStorage.getItem(domain))
+  return employees ? employees.find(employee => employee.key === id) : false
+}
 
 dataHandler.set = (domain, id, data) => {
-  switch (domain) {
-    case "employees":
-        // Get localstorage employees
-      let employees = JSON.parse(localStorage.getItem("employees"));
+  // Get localstorage employees
+  const employees = JSON.parse(localStorage.getItem(domain))
 
-      // delete the employee with id
-      const objIndex = employees.findIndex(e => e.key == id);
-      if (objIndex > -1) {
-        employees.splice(objIndex, 1);
-      }
-      employees.push(data)
-
-      // save changes to localstorage
-      localStorage.setItem("employees", JSON.stringify(employees));
-    default:
-      return false;
+  // delete the employee with id
+  const objIndex = employees.findIndex(e => e.key === id)
+  if (objIndex > -1) {
+    employees.splice(objIndex, 1)
   }
-};
+  employees.push(data)
 
-export default dataHandler;
+  // save changes to localstorage
+  localStorage.setItem(domain, JSON.stringify(employees))
+}
+
+export default dataHandler

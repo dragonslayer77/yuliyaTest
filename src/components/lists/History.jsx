@@ -1,33 +1,23 @@
-import React from "react";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { Timeline } from "antd";
+import { Timeline } from 'antd'
 
-const History = (props) => {
-  console.log(props.history);
+const History = ({ history }) => {
+  // console.log({history, historyrev: history.reverse()})
   return (
     <Timeline>
-      {props.history.map(history => (
-        <Timeline.Item color="green">
-        {history}
+      {history && history.slice(0).reverse().map(history => (
+        <Timeline.Item color={history.indexOf('-') === -1 ? 'green' : 'red'} key={`${history}-${Math.random()}`}>
+          {history}
         </Timeline.Item>
-  ))}
-      {/* <Timeline.Item color="green">
-      Submitted Hours
-      </Timeline.Item>
-      <Timeline.Item color="green">
-      Submitted Hours
-      </Timeline.Item>
-      <Timeline.Item color="red">
-      Failed to Submit Absences
-      </Timeline.Item>
-      <Timeline.Item color="red">
-      Failed to Submit Absences
-      </Timeline.Item>
-      <Timeline.Item color="red">
-      Failed to Submit Hours
-      </Timeline.Item> */}
+      ))}
     </Timeline>
-  );
-};
+  )
+}
 
-export default History;
+History.propTypes = {
+  history: PropTypes.array,
+}
+
+export default History
